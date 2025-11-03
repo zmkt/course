@@ -19,8 +19,8 @@ const (
 		return value
 	}
 
-	func outputFunction (numberOne float64, numberTwo float64) {
-		fmt.Println(numberOne, numberTwo)
+	func outputFunction (number float64, currencyOne float64, currencyTwo float64) float64 {
+		return number * currencyOne / currencyTwo
 	}
 
 	func main() {
