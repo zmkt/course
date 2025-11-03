@@ -19,13 +19,16 @@ const (
 		return value
 	}
 
-	func outputFunction (number float64, currencyOne float64, currencyTwo float64) float64 {
+	func outputFunction (number float64, currencyOne float64, currencyTwo float64) float64{
 		return number * currencyOne / currencyTwo
 	}
 
 	func main() {
 
 		inputFunction()
+		result := outputFunction(2, USDToEUR, USDToRUB)
+		
+		fmt.Println(result)
 
 		fmt.Println("USD to EUR:", USDToEUR)
 		fmt.Println("USD to RUB:", USDToRUB)
