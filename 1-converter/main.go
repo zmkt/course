@@ -10,8 +10,24 @@ const (
 	EURToRUB = USDToRUB / USDToEUR
 )
 
-func main() {
-	fmt.Println("USD to EUR:", USDToEUR)
-	fmt.Println("USD to RUB:", USDToRUB)
-	fmt.Printf("EUR to RUB: %.2f\n", EURToRUB)
-}
+	func inputFunction () float64 {
+		var value float64;
+		fmt.Println("Введите значение: ")
+
+		fmt.Scan(&value)
+
+		return value
+	}
+
+	func outputFunction (numberOne float64, numberTwo float64) {
+		fmt.Println(numberOne, numberTwo)
+	}
+
+	func main() {
+
+		inputFunction()
+
+		fmt.Println("USD to EUR:", USDToEUR)
+		fmt.Println("USD to RUB:", USDToRUB)
+		fmt.Printf("EUR to RUB: %.2f\n", EURToRUB)
+	}
