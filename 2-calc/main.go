@@ -73,24 +73,32 @@ func main() {
 		return
 	}
 
-	var result float64
+	operation = strings.ToLower(operation)
 
-	switch {
-	case operation == "AVG" || operation == "avg":
-		result = AVG(numbers)
-	case operation == "SUM" || operation == "sum":
-		result = float64(SUM(numbers))
-	case operation == "MED" || operation == "med":
-		n := len(numbers)
-		if n%2 == 1 {
-			result = float64(numbers[n/2])
-		} else {
-			result = float64(numbers[n/2-1]+numbers[n/2]) / 2.0
-		}
-	default:
-		fmt.Println("Неправильный оператор")
+	sumFloat64 := func(numbers []int) float64 {
+		return float64(SUM(numbers))
 	}
 
-	fmt.Println(result)
+	medFloat64 := func(numbers []int) float64 {
+		n := len(numbers)
+		if n%2 == 1 {
+			return float64(numbers[n/2])
+		} else {
+			return float64(numbers[n/2-1]+numbers[n/2]) / 2.0
+		}
+	}
+
+	operations := map[string]func([]int) float64{
+		"avg": AVG,
+		"sum": sumFloat64,
+		"med": medFloat64,
+	}
+
+	if fn, ok := operations[operation]; ok {
+		result := fn(numbers)
+		fmt.Println(result)
+	} else {
+		fmt.Println("Неправильный оператор")
+	}
 
 }
