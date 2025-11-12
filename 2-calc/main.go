@@ -36,19 +36,19 @@ func renderNumbers() ([]int, error) {
 	return numbers, nil
 }
 
-func AVG(numbers []int) float64 {
-	var length int = len(numbers)
+func AVG(numbers *[]int) float64 {
+	var length int = len(*numbers)
 	var sum int = 0
-	for _, value := range numbers {
+	for _, value := range *numbers {
 		sum += value
 	}
 	return float64(sum) / float64(length)
 }
 
-func SUM(numbers []int) int {
+func SUM(numbers *[]int) int {
 	var sum = 0
 
-	for _, value := range numbers {
+	for _, value := range *numbers {
 		sum += value
 	}
 
@@ -73,24 +73,28 @@ func main() {
 		return
 	}
 
-	var result float64
+	operation = strings.ToLower(operation)
 
-	switch {
-	case operation == "AVG" || operation == "avg":
-		result = AVG(numbers)
-	case operation == "SUM" || operation == "sum":
-		result = float64(SUM(numbers))
-	case operation == "MED" || operation == "med":
-		n := len(numbers)
+	medFloat64 := func(numbers *[]int) float64 {
+		n := len(*numbers)
 		if n%2 == 1 {
-			result = float64(numbers[n/2])
+			return float64((*numbers)[n/2])
 		} else {
-			result = float64(numbers[n/2-1]+numbers[n/2]) / 2.0
+			return float64((*numbers)[n/2-1]+(*numbers)[n/2]) / 2.0
 		}
-	default:
-		fmt.Println("Неправильный оператор")
 	}
 
-	fmt.Println(result)
+	operations := map[string]func(*[]int) float64{
+		"avg": AVG,
+		"sum": func(nums *[]int) float64 { return float64(SUM(nums)) },
+		"med": medFloat64, // надо также переписать мед, чтобы принимать *([]int)
+	}
+
+	if fn, ok := operations[operation]; ok {
+		result := fn(&numbers)
+		fmt.Println(result)
+	} else {
+		fmt.Println("Неправильный оператор")
+	}
 
 }
