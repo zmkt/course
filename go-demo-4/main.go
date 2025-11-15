@@ -1,8 +1,10 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"math/rand/v2"
+	"net/url"
 )
 
 type account struct {
@@ -23,15 +25,30 @@ func (acc *account) generatePassword(n int) {
 	acc.password = string(res)
 }
 
-func newAccount(login, password, url string) *account {
+func newAccount(login, password, urlString string) (*account, error) {
 
-	
+	if login == "" {
+		return nil, errors.New("Неправильный login")
+	}
 
-	return &account{
-		url:      url,
+	_, err := url.ParseRequestURI(urlString)
+
+	if err != nil {
+		fmt.Println("Ошибка")
+		return nil, errors.New("Неправильный url")
+	}
+
+	newAcc := &account{
+		url:      urlString,
 		login:    login,
 		password: password,
 	}
+
+	if password == "" {
+		newAcc.generatePassword(123)
+	}
+
+	return newAcc, nil
 
 }
 
@@ -42,9 +59,12 @@ func main() {
 	password := promtData("Введите пароль: ")
 	url := promtData("Введите url: ")
 
+	myAccount, err := newAccount(login, password, url)
 
-
-	myAccount := newAccount(login, password, url)
+	if err != nil {
+		fmt.Println("Неправильный url или login")
+		return
+	}
 
 	myAccount.generatePassword(12)
 
@@ -55,6 +75,6 @@ func main() {
 func promtData(prompt string) string {
 	fmt.Print(prompt)
 	var res string
-	fmt.Scan(&res)
+	fmt.Scanln(&res)
 	return res
 }
