@@ -5,15 +5,15 @@ import (
 	"os"
 )
 
-func ReadFile() {
+func ReadFile(name string) ([]byte, error) {
 
-	data, err := os.ReadFile("file.txt")
+	data, err := os.ReadFile(name)
+
 	if err != nil {
-		fmt.Println(err)
-		return
+		return nil, err
 	}
 
-	fmt.Println(string(data))
+	return data, nil
 }
 
 func WriteFile(content []byte, name string) {
@@ -29,7 +29,6 @@ func WriteFile(content []byte, name string) {
 
 	_, err = file.Write(content)
 	if err != nil {
-		file.Close()
 		fmt.Println(err)
 		return
 	}

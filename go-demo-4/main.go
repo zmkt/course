@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"go-demo-4/account"
-	"go-demo-4/files"
 )
 
 func main() {
@@ -64,14 +63,6 @@ func createAccount() {
 
 	vault := account.NewVault()
 	vault.AddAccount(*myAccount)
-	data, err := vault.ToBytes()
-
-	if err != nil {
-		fmt.Println("Не удалось преобразовать в JSON")
-		return
-	}
-
-	files.WriteFile(data, "data.json")
 }
 
 func promtData(prompt string) string {
