@@ -16,9 +16,9 @@ type Account struct {
 }
 
 type AccountWithTimeStamp struct {
-	Account
 	cratedAt  time.Time
 	updatedAt time.Time
+	Account
 }
 
 func (acc Account) OutputPassword() {
