@@ -3,26 +3,23 @@ package account
 import (
 	"errors"
 	"fmt"
-	"github.com/fatih/color"
 	"math/rand/v2"
 	"net/url"
 	"time"
+
+	"github.com/fatih/color"
 )
 
 type Account struct {
-	login    string
-	password string
-	url      string
+	Login     string    `json:"login"`
+	Password  string    `json:"password"`
+	Url       string    `json:"url"`
+	CratedAt  time.Time `json:"cratedAt"`
+	UpdatedAt time.Time `json:"updatedAt"`
 }
 
-type AccountWithTimeStamp struct {
-	cratedAt  time.Time
-	updatedAt time.Time
-	Account
-}
-
-func (acc Account) OutputPassword() {
-	color.Cyan(acc.login)
+func (acc *Account) OutputPassword() {
+	color.Cyan(acc.Login)
 	fmt.Println(acc)
 }
 
@@ -31,61 +28,32 @@ func (acc *Account) GeneratePassword(n int) {
 	for i := range res {
 		res[i] = letterRunes[rand.IntN(len(letterRunes))]
 	}
-	acc.password = string(res)
+	acc.Password = string(res)
 }
 
-// func newAccount(login, password, urlString string) (*account, error) {
-
-// 	if login == "" {
-// 		return nil, errors.New("Неправильный login")
-// 	}
-
-// 	_, err := url.ParseRequestURI(urlString)
-
-// 	if err != nil {
-// 		fmt.Println("Ошибка")
-// 		return nil, errors.New("Неправильный url")
-// 	}
-
-// 	newAcc := &account{
-// 		url:      urlString,
-// 		login:    login,
-// 		password: password,
-// 	}
-
-// 	if password == "" {
-// 		newAcc.generatePassword(123)
-// 	}
-
-// 	return newAcc, nil
-
-// }
-
-func NewAccountWithTimeStamp(login, password, urlString string) (*AccountWithTimeStamp, error) {
+func NewAccount(login, password, urlString string) (*Account, error) {
 
 	if login == "" {
-		return nil, errors.New("Неправильный login")
+		return nil, errors.New("неправильный login")
 	}
 
 	_, err := url.ParseRequestURI(urlString)
 
 	if err != nil {
 		fmt.Println("Ошибка")
-		return nil, errors.New("Неправильный url")
+		return nil, errors.New("неправильный url")
 	}
 
-	newAcc := &AccountWithTimeStamp{
-		cratedAt:  time.Now(),
-		updatedAt: time.Now(),
-		Account: Account{
-			url:      urlString,
-			login:    login,
-			password: password,
-		},
+	newAcc := &Account{
+		CratedAt:  time.Now(),
+		UpdatedAt: time.Now(),
+		Url:       urlString,
+		Login:     login,
+		Password:  password,
 	}
 
 	if password == "" {
-		newAcc.GeneratePassword(123)
+		newAcc.GeneratePassword(12)
 	}
 
 	return newAcc, nil
