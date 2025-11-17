@@ -1,7 +1,6 @@
 package bins
 
 import (
-	"3-struct/bins"
 	"time"
 )
 
