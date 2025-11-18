@@ -3,9 +3,13 @@ package main
 import (
 	"fmt"
 	"go-demo-4/account"
+
+	"github.com/fatih/color"
 )
 
 func main() {
+
+	vault := account.NewVault()
 
 	fmt.Println("__Менеджер паролей__")
 	for {
@@ -14,11 +18,11 @@ func main() {
 	Menu:
 		switch variant {
 		case 1:
-			createAccount()
+			createAccount(vault)
 		case 2:
-			findAccount()
+			findAccount(vault)
 		case 3:
-			deleteAccount()
+			deleteAccount(vault)
 		default:
 			break Menu
 		}
@@ -41,18 +45,32 @@ func getMenu() int {
 
 }
 
-func findAccount() {
-
+func findAccount(vault *account.Vault) {
+	url := promptData("Введите URL для поиска: ")
+	accounts := vault.FindAccountsByUrl(url)
+	if len(accounts) == 0 {
+		color.Red("Аккаунтов не найдено")
+	}
+	for _, account := range accounts {
+		account.Output()
+	}
 }
 
-func deleteAccount() {
+func deleteAccount(vault *account.Vault) {
+	url := promptData("Введите URL для удаления: ")
+	isDetected := vault.DeleteAccountByUrl(url)
 
+	if isDetected {
+		color.Green("Удалено")
+	} else {
+		color.Red("Не найдено")
+	}
 }
 
-func createAccount() {
-	login := promtData("Введите логин: ")
-	password := promtData("Введите пароль: ")
-	url := promtData("Введите url: ")
+func createAccount(vault *account.Vault) {
+	login := promptData("Введите логин: ")
+	password := promptData("Введите пароль: ")
+	url := promptData("Введите url: ")
 
 	myAccount, err := account.NewAccount(login, password, url)
 
@@ -61,11 +79,10 @@ func createAccount() {
 		return
 	}
 
-	vault := account.NewVault()
 	vault.AddAccount(*myAccount)
 }
 
-func promtData(prompt string) string {
+func promptData(prompt string) string {
 	fmt.Print(prompt)
 	var res string
 	fmt.Scanln(&res)

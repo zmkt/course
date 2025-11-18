@@ -3,6 +3,7 @@ package account
 import (
 	"encoding/json"
 	"go-demo-4/files"
+	"strings"
 	"time"
 
 	"github.com/fatih/color"
@@ -41,15 +42,7 @@ func NewVault() *Vault {
 
 func (vault *Vault) AddAccount(acc Account) {
 	vault.Accounts = append(vault.Accounts, acc)
-	vault.UpdatedAt = time.Now()
-
-	data, err := vault.ToBytes()
-
-	if err != nil {
-		color.Red("Не удалось преобразовать")
-	}
-
-	files.WriteFile(data, "data.json")
+	vault.save()
 }
 
 func (vault *Vault) ToBytes() ([]byte, error) {
@@ -61,4 +54,42 @@ func (vault *Vault) ToBytes() ([]byte, error) {
 	}
 
 	return file, nil
+}
+
+func (vault *Vault) FindAccountsByUrl(url string) []Account {
+	var accounts []Account
+	for _, account := range vault.Accounts {
+		isMatched := strings.Contains(account.Url, url)
+		if isMatched {
+			accounts = append(accounts, account)
+		}
+	}
+	return accounts
+}
+
+func (vault *Vault) DeleteAccountByUrl(url string) bool {
+	var accounts []Account
+	isDetected := false
+	for _, account := range vault.Accounts {
+		isMatched := strings.Contains(account.Url, url)
+		if !isMatched {
+			accounts = append(accounts, account)
+			continue
+		}
+		isDetected = true
+	}
+
+	vault.Accounts = accounts
+	vault.save()
+
+	return isDetected
+}
+
+func (vault *Vault) save() {
+	vault.UpdatedAt = time.Now()
+	data, err := vault.ToBytes()
+	if err != nil {
+		color.Red("Не удалось преобразовать")
+	}
+	files.WriteFile(data, "data.json")
 }
