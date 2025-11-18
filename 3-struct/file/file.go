@@ -12,5 +12,5 @@ func ReadFile(fileName string) ([]byte, error) {
 
 func IsJSONFile(fileName string) bool {
 	ext := strings.ToLower(strings.TrimSpace(filepath.Ext(fileName)))
-	return ext == "json"
+	return ext == ".json"
 }
