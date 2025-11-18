@@ -11,24 +11,25 @@ import (
 func main() {
 	args := os.Args
 
-	if len(args) != 5 {
-		fmt.Println("Ошибка")
+	if len(args[1]) != 5 {
+		fmt.Println("Ошибка1")
 		return
 	}
 
 	parsePrivate, err := strconv.ParseBool(args[2])
 	if err != nil {
-		fmt.Println("Ошибка")
+		fmt.Println("Ошибка2")
 		return
 	}
 
 	createAtStr := args[3]
 	createAtParse, err := time.Parse("2006-01-02T15:04:05", createAtStr)
 	if err != nil {
-		fmt.Println("Ошибка")
+		fmt.Println("Ошибка3")
 		return
 	}
 
 	binInput := bins.NewBin(args[1], parsePrivate, createAtParse, args[4])
+
 	fmt.Println(binInput)
 }
