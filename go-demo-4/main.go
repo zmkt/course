@@ -3,13 +3,14 @@ package main
 import (
 	"fmt"
 	"go-demo-4/account"
+	"go-demo-4/files"
 
 	"github.com/fatih/color"
 )
 
 func main() {
 
-	vault := account.NewVault()
+	vault := account.NewVault(files.NewJsonDB("data.json"))
 
 	fmt.Println("__Менеджер паролей__")
 	for {
@@ -45,7 +46,7 @@ func getMenu() int {
 
 }
 
-func findAccount(vault *account.Vault) {
+func findAccount(vault *account.VaultWithDb) {
 	url := promptData("Введите URL для поиска: ")
 	accounts := vault.FindAccountsByUrl(url)
 	if len(accounts) == 0 {
@@ -56,7 +57,7 @@ func findAccount(vault *account.Vault) {
 	}
 }
 
-func deleteAccount(vault *account.Vault) {
+func deleteAccount(vault *account.VaultWithDb) {
 	url := promptData("Введите URL для удаления: ")
 	isDetected := vault.DeleteAccountByUrl(url)
 
@@ -67,7 +68,7 @@ func deleteAccount(vault *account.Vault) {
 	}
 }
 
-func createAccount(vault *account.Vault) {
+func createAccount(vault *account.VaultWithDb) {
 	login := promptData("Введите логин: ")
 	password := promptData("Введите пароль: ")
 	url := promptData("Введите url: ")
