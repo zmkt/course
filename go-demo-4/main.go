@@ -9,6 +9,12 @@ import (
 	"github.com/fatih/color"
 )
 
+var menu = map[string]func(*account.VaultWithDb){
+	"1": createAccount,
+	"2": findAccount,
+	"3": deleteAccount,
+}
+
 func main() {
 
 	vault := account.NewVault(files.NewJsonDB("data.json"))
@@ -17,17 +23,11 @@ func main() {
 Menu:
 	for {
 		variant := promptData([]string{"1. Создать аккаунт", "2. Найти аккаунт", "3. Удалить аккаунт", "4. Выход", "Выберите вариант"})
-
-		switch variant {
-		case "1":
-			createAccount(vault)
-		case "2":
-			findAccount(vault)
-		case "3":
-			deleteAccount(vault)
-		default:
+		menuFunction := menu[variant]
+		if menuFunction == nil {
 			break Menu
 		}
+		menuFunction(vault)
 	}
 
 }
