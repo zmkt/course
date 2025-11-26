@@ -2,6 +2,7 @@ package files
 
 import (
 	"fmt"
+	"go-demo-4/output"
 	"os"
 )
 
@@ -33,7 +34,7 @@ func (db *JsonDB) Write(content []byte) {
 	file, err := os.Create(db.fileName)
 
 	if err != nil {
-		fmt.Println("Ошибка")
+		output.PrintError(err)
 		return
 	}
 
@@ -41,7 +42,7 @@ func (db *JsonDB) Write(content []byte) {
 
 	_, err = file.Write(content)
 	if err != nil {
-		fmt.Println(err)
+		output.PrintError(err)
 		return
 	}
 

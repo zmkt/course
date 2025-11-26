@@ -2,12 +2,23 @@ package account
 
 import (
 	"encoding/json"
-	"go-demo-4/files"
+	"go-demo-4/output"
 	"strings"
 	"time"
-
-	"github.com/fatih/color"
 )
+
+type ByteReader interface {
+	Read() ([]byte, error)
+}
+
+type ByteWriter interface {
+	Write([]byte)
+}
+
+type Db interface {
+	ByteReader
+	ByteWriter
+}
 
 type Vault struct {
 	Accounts  []Account `json:"accounts"`
@@ -16,17 +27,17 @@ type Vault struct {
 
 type VaultWithDb struct {
 	Vault
-	db files.JsonDB
+	db Db
 }
 
-func NewVault(db *files.JsonDB) *VaultWithDb {
+func NewVault(db Db) *VaultWithDb {
 	file, err := db.Read()
 
 	if err != nil {
 		return &VaultWithDb{Vault: Vault{
 			Accounts:  []Account{},
 			UpdatedAt: time.Now(),
-		}, db: *db}
+		}, db: db}
 	}
 
 	var vault Vault
@@ -34,16 +45,16 @@ func NewVault(db *files.JsonDB) *VaultWithDb {
 	err = json.Unmarshal(file, &vault)
 
 	if err != nil {
-		color.Red("Не удалось разобрать файл data.json")
+		output.PrintError("Не удалось разобрать файл data.json")
 		return &VaultWithDb{Vault: Vault{
 			Accounts:  []Account{},
 			UpdatedAt: time.Now(),
-		}, db: *db}
+		}, db: db}
 	}
 
 	return &VaultWithDb{
 		Vault: vault,
-		db:    *db,
+		db:    db,
 	}
 
 }
@@ -97,7 +108,7 @@ func (vault *VaultWithDb) save() {
 	vault.UpdatedAt = time.Now()
 	data, err := vault.Vault.ToBytes()
 	if err != nil {
-		color.Red("Не удалось преобразовать")
+		output.PrintError("Не удалось преобразовать")
 	}
 	vault.db.Write(data)
 }

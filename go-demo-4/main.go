@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"go-demo-4/account"
 	"go-demo-4/files"
+	"go-demo-4/output"
 
 	"github.com/fatih/color"
 )
@@ -64,7 +65,7 @@ func deleteAccount(vault *account.VaultWithDb) {
 	if isDetected {
 		color.Green("Удалено")
 	} else {
-		color.Red("Не найдено")
+		output.PrintError("Не найдено")
 	}
 }
 
@@ -76,7 +77,7 @@ func createAccount(vault *account.VaultWithDb) {
 	myAccount, err := account.NewAccount(login, password, url)
 
 	if err != nil {
-		fmt.Println("Неправильный url или login")
+		output.PrintError("Неправильный url или login")
 		return
 	}
 

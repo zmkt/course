@@ -14,6 +14,5 @@ func (db *CloudDb) Read() ([]byte, error) {
 	return []byte{}, nil
 }
 
-func (db *CloudDb) Write() (content []byte) {
-	return nil
+func (db *CloudDb) Write(content []byte) {
 }
