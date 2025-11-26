@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"go-demo-4/output"
 	"os"
+
+	"github.com/fatih/color"
 )
 
 type JsonDB struct {
@@ -46,5 +48,5 @@ func (db *JsonDB) Write(content []byte) {
 		return
 	}
 
-	fmt.Println("Запись успешна")
+	color.Green("Запись успешна")
 }
