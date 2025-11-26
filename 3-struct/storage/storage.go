@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-func StorageBinToFile(filename string, bins interface{}) error {
+func StorageBinToFile(filename string, bins any) error {
 
 	data, err := json.Marshal(filename)
 	if err != nil {
@@ -16,7 +16,7 @@ func StorageBinToFile(filename string, bins interface{}) error {
 	return os.WriteFile(filename, data, 0644)
 }
 
-func LoadFileDin(fileName string, bin interface{}) error {
+func LoadFileDin(fileName string, bin any) error {
 
 	data, err := os.ReadFile(fileName)
 	if err != nil {
