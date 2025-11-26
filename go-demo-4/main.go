@@ -14,10 +14,10 @@ func main() {
 	vault := account.NewVault(files.NewJsonDB("data.json"))
 
 	fmt.Println("__Менеджер паролей__")
+Menu:
 	for {
 		variant := promptData([]string{"1. Создать аккаунт", "2. Найти аккаунт", "3. Удалить аккаунт", "4. Выход", "Выберите вариант"})
 
-	Menu:
 		switch variant {
 		case "1":
 			createAccount(vault)

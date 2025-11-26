@@ -1,7 +1,6 @@
 package files
 
 import (
-	"fmt"
 	"go-demo-4/output"
 	"os"
 
