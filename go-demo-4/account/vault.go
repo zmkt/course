@@ -2,6 +2,7 @@ package account
 
 import (
 	"encoding/json"
+	"go-demo-4/encrypter"
 	"go-demo-4/output"
 	"strings"
 	"time"
@@ -27,17 +28,18 @@ type Vault struct {
 
 type VaultWithDb struct {
 	Vault
-	db Db
+	db  Db
+	enc encrypter.Encrypter
 }
 
-func NewVault(db Db) *VaultWithDb {
+func NewVault(db Db, enc encrypter.Encrypter) *VaultWithDb {
 	file, err := db.Read()
 
 	if err != nil {
 		return &VaultWithDb{Vault: Vault{
 			Accounts:  []Account{},
 			UpdatedAt: time.Now(),
-		}, db: db}
+		}, db: db, enc: enc}
 	}
 
 	var vault Vault
@@ -49,12 +51,13 @@ func NewVault(db Db) *VaultWithDb {
 		return &VaultWithDb{Vault: Vault{
 			Accounts:  []Account{},
 			UpdatedAt: time.Now(),
-		}, db: db}
+		}, db: db, enc: enc}
 	}
 
 	return &VaultWithDb{
 		Vault: vault,
 		db:    db,
+		enc:   enc,
 	}
 
 }

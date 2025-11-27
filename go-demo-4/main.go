@@ -3,9 +3,9 @@ package main
 import (
 	"fmt"
 	"go-demo-4/account"
+	"go-demo-4/encrypter"
 	"go-demo-4/files"
 	"go-demo-4/output"
-	"os"
 	"strings"
 
 	"github.com/fatih/color"
@@ -28,15 +28,9 @@ func main() {
 		output.PrintError("Не удалось найти env файл")
 		return
 	}
-	res := os.Getenv("VAR")
-	fmt.Println("Res----->", res)
 
-	for _, value := range os.Environ() {
-		pair := strings.SplitN(value, "=", 2)
-		fmt.Println(pair[0])
-	}
+	vault := account.NewVault(files.NewJsonDB("data.json"), *encrypter.NerEncrypter())
 
-	vault := account.NewVault(files.NewJsonDB("data.json"))
 Menu:
 	for {
 		variant := promptData(menuVariants...)
