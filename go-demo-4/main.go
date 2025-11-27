@@ -5,6 +5,7 @@ import (
 	"go-demo-4/account"
 	"go-demo-4/files"
 	"go-demo-4/output"
+	"strings"
 
 	"github.com/fatih/color"
 )
@@ -34,7 +35,9 @@ Menu:
 
 func findAccount(vault *account.VaultWithDb) {
 	url := promptData([]string{"Введите URL для поиска: "})
-	accounts := vault.FindAccountsByUrl(url)
+	accounts := vault.FindAccounts(url, func(acc account.Account, str string) bool {
+		return strings.Contains(acc.Url, str)
+	})
 	if len(accounts) == 0 {
 		color.Red("Аккаунтов не найдено")
 	}
