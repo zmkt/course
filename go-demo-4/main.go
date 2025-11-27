@@ -12,8 +12,9 @@ import (
 
 var menu = map[string]func(*account.VaultWithDb){
 	"1": createAccount,
-	"2": findAccount,
-	"3": deleteAccount,
+	"2": findAccountByUrl,
+	"3": findAccountByLogin,
+	"4": deleteAccount,
 }
 
 func main() {
@@ -23,7 +24,7 @@ func main() {
 	fmt.Println("__Менеджер паролей__")
 Menu:
 	for {
-		variant := promptData([]string{"1. Создать аккаунт", "2. Найти аккаунт", "3. Удалить аккаунт", "4. Выход", "Выберите вариант"})
+		variant := promptData([]string{"1. Создать аккаунт", "2. Найти аккаунт по URL", "3. Найти аккаунт по логину", "4. Удалить аккаунт", "5. Выход", "Выберите вариант"})
 		menuFunction := menu[variant]
 		if menuFunction == nil {
 			break Menu
@@ -33,15 +34,27 @@ Menu:
 
 }
 
-func findAccount(vault *account.VaultWithDb) {
+func findAccountByUrl(vault *account.VaultWithDb) {
 	url := promptData([]string{"Введите URL для поиска: "})
 	accounts := vault.FindAccounts(url, func(acc account.Account, str string) bool {
 		return strings.Contains(acc.Url, str)
 	})
-	if len(accounts) == 0 {
+	outputResult(&accounts)
+}
+
+func findAccountByLogin(vault *account.VaultWithDb) {
+	login := promptData([]string{"Введите логин для поиска: "})
+	accounts := vault.FindAccounts(login, func(acc account.Account, str string) bool {
+		return strings.Contains(acc.Login, str)
+	})
+	outputResult(&accounts)
+}
+
+func outputResult(accounts *[]account.Account) {
+	if len(*accounts) == 0 {
 		color.Red("Аккаунтов не найдено")
 	}
-	for _, account := range accounts {
+	for _, account := range *accounts {
 		account.Output()
 	}
 }
