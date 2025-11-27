@@ -1,3 +1,4 @@
 /course
 data.json
 .env*
+*.vault
