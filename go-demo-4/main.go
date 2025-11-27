@@ -5,9 +5,11 @@ import (
 	"go-demo-4/account"
 	"go-demo-4/files"
 	"go-demo-4/output"
+	"os"
 	"strings"
 
 	"github.com/fatih/color"
+	"github.com/joho/godotenv"
 )
 
 var menu = map[string]func(*account.VaultWithDb){
@@ -20,10 +22,21 @@ var menu = map[string]func(*account.VaultWithDb){
 var menuVariants = []string{"1. Создать аккаунт", "2. Найти аккаунт по URL", "3. Найти аккаунт по логину", "4. Удалить аккаунт", "5. Выход", "Выберите вариант"}
 
 func main() {
+	fmt.Println("__Менеджер паролей__")
+	err := godotenv.Load()
+	if err != nil {
+		output.PrintError("Не удалось найти env файл")
+		return
+	}
+	res := os.Getenv("VAR")
+	fmt.Println("Res----->", res)
+
+	for _, value := range os.Environ() {
+		pair := strings.SplitN(value, "=", 2)
+		fmt.Println(pair[0])
+	}
 
 	vault := account.NewVault(files.NewJsonDB("data.json"))
-
-	fmt.Println("__Менеджер паролей__")
 Menu:
 	for {
 		variant := promptData(menuVariants...)
