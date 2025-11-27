@@ -96,6 +96,5 @@ func main() {
 	} else {
 		fmt.Println("Неправильный оператор")
 	}
-	
 
 }
