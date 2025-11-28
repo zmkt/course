@@ -6,6 +6,8 @@ import (
 	"go-demo-4/output"
 	"strings"
 	"time"
+
+	"github.com/fatih/color"
 )
 
 type ByteReader interface {
@@ -42,12 +44,14 @@ func NewVault(db Db, enc encrypter.Encrypter) *VaultWithDb {
 		}, db: db, enc: enc}
 	}
 
+	data := enc.Decrypt(file)
 	var vault Vault
+	err = json.Unmarshal(data, &vault)
 
-	err = json.Unmarshal(file, &vault)
+	color.Cyan("Найдено %d аккаунтов", len(vault.Accounts))
 
 	if err != nil {
-		output.PrintError("Не удалось разобрать файл data.json")
+		output.PrintError("Не удалось разобрать файл data.vault")
 		return &VaultWithDb{Vault: Vault{
 			Accounts:  []Account{},
 			UpdatedAt: time.Now(),
@@ -109,8 +113,9 @@ func (vault *VaultWithDb) DeleteAccountByUrl(url string) bool {
 func (vault *VaultWithDb) save() {
 	vault.UpdatedAt = time.Now()
 	data, err := vault.Vault.ToBytes()
+	encData := vault.enc.Encrypt(data)
 	if err != nil {
 		output.PrintError("Не удалось преобразовать")
 	}
-	vault.db.Write(data)
+	vault.db.Write(encData)
 }

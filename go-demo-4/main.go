@@ -29,7 +29,7 @@ func main() {
 		return
 	}
 
-	vault := account.NewVault(files.NewJsonDB("data.json"), *encrypter.NerEncrypter())
+	vault := account.NewVault(files.NewJsonDB("data.vault"), *encrypter.NerEncrypter())
 
 Menu:
 	for {
