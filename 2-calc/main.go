@@ -87,7 +87,7 @@ func main() {
 	operations := map[string]func(*[]int) float64{
 		"avg": AVG,
 		"sum": func(nums *[]int) float64 { return float64(SUM(nums)) },
-		"med": medFloat64, // надо также переписать мед, чтобы принимать *([]int)
+		"med": medFloat64,
 	}
 
 	if fn, ok := operations[operation]; ok {
