@@ -1,6 +1,7 @@
 package main
 
 import (
+	"3-struct/api"
 	"3-struct/bins"
 	"fmt"
 	"os"
@@ -29,7 +30,14 @@ func main() {
 		return
 	}
 
+	apiCfg, err := api.NewConfig()
+	if err != nil {
+		fmt.Println("Ошибка конфига:", err)
+		return
+	}
+
 	binInput := bins.NewBin(args[1], parsePrivate, createAtParse, args[4])
 
+	fmt.Println("API key:", apiCfg.Key)
 	fmt.Println(binInput)
 }
