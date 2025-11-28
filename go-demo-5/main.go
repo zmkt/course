@@ -3,14 +3,21 @@ package main
 import (
 	"flag"
 	"fmt"
+	"go-demo-5/geo"
 )
 
 func main() {
 	city := flag.String("city", "", "Город пользователя")
-	format := flag.Int("format", 16, "Формат вывода погоды")
 
 	flag.Parse()
 
 	fmt.Println("city--->", *city)
-	fmt.Println("format--->", *format)
+
+	geoData, err := geo.GetMyLocation(*city)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	fmt.Println("geoData-->",geoData)
+
 }
