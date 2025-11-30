@@ -11,13 +11,11 @@ func main() {
 
 	flag.Parse()
 
-	fmt.Println("city--->", *city)
-
 	geoData, err := geo.GetMyLocation(*city)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
 
-	fmt.Println("geoData-->",geoData)
+	fmt.Println("geoData-->", geoData)
 
 }

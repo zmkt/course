@@ -15,11 +15,11 @@ func GetMyLocation(city string) (*GeoData, error) {
 
 	if city != "" {
 		return &GeoData{
-			City: "city",
+			City: city,
 		}, nil
 	}
 
-	resp, err := http.Get("https://ipapi.co/json/")
+	resp, err := http.Get("http://ip-api.com/json/")
 	if err != nil {
 		return nil, err
 	}
