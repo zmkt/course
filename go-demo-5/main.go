@@ -4,10 +4,12 @@ import (
 	"flag"
 	"fmt"
 	"go-demo-5/geo"
+	"go-demo-5/weather"
 )
 
 func main() {
 	city := flag.String("city", "", "Город пользователя")
+	format := flag.Int("format", 16, "Формат вывода погоды")
 
 	flag.Parse()
 
@@ -17,5 +19,9 @@ func main() {
 	}
 
 	fmt.Println("geoData-->", geoData)
+
+	weatherData := weather.GetWeather(*geoData, *format)
+
+	fmt.Println("weatherData-->", weatherData)
 
 }
