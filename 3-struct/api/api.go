@@ -17,31 +17,27 @@ type Config struct {
 }
 
 type Account struct {
-	login     string
-	password  string
-	url       string
-	createdAt string
-	updatedAt string
+	Login     string `json:"login"`
+	Password  string `json:"password"`
+	URL       string `json:"url"`
+	CreatedAt string `json:"createdAt"`
+	UpdatedAt string `json:"updatedAt"`
 }
 
-type Accounts struct {
-	accounts  []Account
-	updatedAt string
-}
-
-type ResponseAccounts struct {
-	record Accounts
-}
-
-type Response struct {
-	Record   Accounts         `json:"record"`
-	Metadata ResponseMetadata `json:"metadata"`
+type Record struct {
+	Accounts  []Account `json:"accounts"`
+	UpdatedAt string    `json:"updatedAt"`
 }
 
 type ResponseMetadata struct {
 	ID        string    `json:"id"`
 	Private   bool      `json:"private"`
 	CreatedAt time.Time `json:"createdAt"`
+}
+
+type ResponseAccounts struct {
+	Record   Record           `json:"record"`
+	Metadata ResponseMetadata `json:"metadata"`
 }
 
 type AccountInfo struct {
@@ -92,11 +88,19 @@ func GetAccounts(id string, key string) (ResponseAccounts, error) {
 		return ResponseAccounts{}, err
 	}
 
-	var result ResponseAccounts
-	err = json.NewDecoder(resp.Body).Decode(&result)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return ResponseAccounts{}, err
 	}
+
+	fmt.Println("body--->", body)
+
+	var result ResponseAccounts
+	if err := json.Unmarshal(body, &result); err != nil {
+		return ResponseAccounts{}, err
+	}
+
+	fmt.Printf("len(result.Record.Accounts)=%d\n", len(result.Record.Accounts))
 
 	return result, nil
 
@@ -133,7 +137,7 @@ func CreateAccounts(filePath string, key string, binName string) (*bins.Bin, err
 		return nil, err
 	}
 
-	var response Response
+	var response ResponseAccounts
 	err = json.Unmarshal(respBody, &response)
 	if err != nil {
 		return nil, err
