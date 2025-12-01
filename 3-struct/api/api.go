@@ -93,14 +93,10 @@ func GetAccounts(id string, key string) (ResponseAccounts, error) {
 		return ResponseAccounts{}, err
 	}
 
-	fmt.Println("body--->", body)
-
 	var result ResponseAccounts
 	if err := json.Unmarshal(body, &result); err != nil {
 		return ResponseAccounts{}, err
 	}
-
-	fmt.Printf("len(result.Record.Accounts)=%d\n", len(result.Record.Accounts))
 
 	return result, nil
 
