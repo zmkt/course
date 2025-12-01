@@ -2,3 +2,4 @@
 data.json
 .env*
 *.vault
+.DS_Store*
