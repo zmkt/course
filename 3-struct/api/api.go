@@ -92,14 +92,13 @@ func GetAccounts(id string, key string) (ResponseAccounts, error) {
 		return ResponseAccounts{}, err
 	}
 
-	body, err := io.ReadAll(resp.Body)
+	var result ResponseAccounts
+	err = json.NewDecoder(resp.Body).Decode(&result)
 	if err != nil {
 		return ResponseAccounts{}, err
 	}
 
-	fmt.Println("body--->", string(body))
-
-	return ResponseAccounts{}, nil
+	return result, nil
 
 }
 

@@ -1,5 +1,5 @@
 /course
 data.json
-.env*
+*.env
 *.vault
 .DS_Store*

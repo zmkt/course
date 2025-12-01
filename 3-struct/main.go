@@ -26,7 +26,11 @@ func main() {
 
 	if *getRequest {
 		if *id != "" {
-			api.GetAccounts(*id, apiCfg.Key)
+			acc, err := api.GetAccounts(*id, apiCfg.Key)
+			if err != nil {
+				fmt.Println(err)
+			}
+			fmt.Printf("Аккаунты: %+v\n", acc)
 		} else {
 			fmt.Println("Некорректный формат")
 		}
